@@ -1,48 +1,39 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-import { Pokemon } from './types';
 
 function App() {
-  const [pokemon, setPokemon] = useState<Pokemon>();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    axios.get('https://pokeapi.co/api/v2/pokemon/greninja')
-      .then(response => {
-        console.log(JSON.stringify(response.data));
-        setPokemon(response.data);
-        setLoading(false);
-      })
-      .catch(error => {
-        setError(error.message);
-        setLoading(false);
-      });
+  const [postResult, setPostResult] = useState("not post");
+  const [getReslt, setGetResult] = useState("not get")
 
+  function onClickPostAxios(){
     axios.post('https://httpbin.org/post', {
       firstName: 'Fred',
       lastName: 'Flintstone'
     })
     .then(function (response) {
-      console.log(response);
+      setPostResult("POST")
     })
     .catch(function (error) {
       console.log(error);
     });
-  }, []);
+  }
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  function onClickGetAxios(){
+    axios.get('https://httpbin.org/get').then(function (response){
+      setGetResult("GET")
+    })
+  }
 
   return (
     <div className="App">
-      <h1>ポケモン人気ランキング</h1>
-      <ul>
-          <li key={pokemon!.id}>
-            <h2>ポケモン人気ランキング第1位は{pokemon!.name}!</h2>
-            <img src={pokemon!.sprites.front_default} alt={pokemon!.name} />
-          </li>
-      </ul>
+      <button data-testid = "postButton" onClick={onClickPostAxios}>Axios POST Data</button>
+      <text>Post Result:</text>
+      <text data-testid= "postResult">{postResult}</text>
+      <br></br>
+      <button data-testid = "getButton"onClick={onClickGetAxios}>Axios GET Data</button>
+      <text>Get Result:</text>
+      <text data-testid = "getResult">{getReslt}</text>
     </div>
   );
 }

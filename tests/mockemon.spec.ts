@@ -18,8 +18,8 @@ test("ヌオーさんしか勝たん", async ({ page }) => {
     // expect(postData).toEqual({ /* 期待するリクエストボディの内容 */ });
     if (request.method() === 'POST') {
         console.log("POST DATA!!!")
-        console.log(request.postData())
-        expect(request.postData()).toEqual({
+        console.log(JSON.parse(request.postData() ?? "nodata"))
+        expect(JSON.parse(request.postData() ?? "nodata")).toEqual({
             firstName: "Fred",
             lastName: "Flintstone"
         });
